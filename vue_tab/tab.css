@@ -1,0 +1,36 @@
+body {
+    font-family: "Microsoft YaHei";
+}
+
+#tab {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.tab-tit {
+    font-size: 0;
+    width: 600px;
+}
+
+.tab-tit a {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    width: 25%;
+    text-align: center;
+    background: #ccc;
+    color: #333;
+    text-decoration: none;
+}
+
+.tab-tit .cur {
+    background: #09f;
+    color: #fff;
+}
+
+.tab-con div {
+    border: 1px solid #ccc;
+    height: 400px;
+    padding-top: 20px;
+}

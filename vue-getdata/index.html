@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>data_demo</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+    <header class="pagewidth">热映</header>
+    <div class="movie_list pagewidth">
+        <ul id="movelist">
+            <li   @click="todetail" v-for="(item,index) in cdata">
+                <div class="movie_img"><img :src="item.images.small"></div>
+                <div class="movie_info">
+                    <h5>{{index}}----- {{item.title}}</h5>
+                    <p>{{item.rating.average}}</p>
+                    <p>导演：{{item.directors[0].name}}</p>
+                    <p>演员：{{item.yy}}</p>
+                </div>
+            </li>
+        </ul>
+        <a id="more" href="#;"></a>
+    </div>
+</body>
+<script>
+var datas = [];
+new Vue({
+    el: '#movelist',
+    data: {
+        cdata: datas
+    },
+    created: function() {
+
+    },
+    methods: {
+        showData: function() {
+            axios.get('https://api.douban.com/v2/movie/in_theaters', {
+                    params: {
+
+                    }
+                })
+                .then(function(response) {
+                    console.log(response);
+                    this.cdata = response.data.subjects;
+                    for (var i = 0; i < this.cdata.length; i++) {
+                        var dyArr = this.cdata[i].directors;
+                        var dy = [];
+                        for (var j = 0; j < dyArr.length; j++) {
+                            dy.push(dyArr[j].name);
+                        }
+
+                        var catArr = this.cdata[i].casts;
+                        var yy = [];
+                        for (var y = 0; y < catArr.length; y++) {
+                            yy.push(catArr[y].name);
+                        }
+                        datas.push(this.cdata[i]);
+                    }
+
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
+        todetail:function(){
+            alert(11);
+            this.$router.push({
+                path: 'detail.html?subjectsId=' + this.cdata.id
+            });
+        }
+    },
+    mounted: function() {
+        this.showData();
+    }
+
+})
+</script>
+
+</html>
