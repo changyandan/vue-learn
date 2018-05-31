@@ -27,12 +27,14 @@
     </div>
 </body>
 <script>
-var datas = [];
+// var datas = [];
 new Vue({
     el: '#movelist',
-    data: {
-        cdata: datas
-    },
+    data:(){
+        return (){
+            cdata:[]
+        }
+    }
     created: function() {
 
     },

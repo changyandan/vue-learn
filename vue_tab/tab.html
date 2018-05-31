@@ -5,6 +5,21 @@
     <title>vue_tab</title>
     <link rel="stylesheet" type="text/css" href="tab.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style type="text/css">
+    ul,
+    li {
+        list-style: none;
+    }
+
+    li {
+        padding: 10px 0;
+    }
+
+    li span {
+        padding: 0 20px 0;
+    }
+    </style>
 </head>
 
 <body>
@@ -20,43 +35,96 @@
             <div v-show="curId===0">
                 全部
                 <ul>
-                    <!-- <li><span>排名：1</span><span>频道：cctv</span><span>节目：这是节目名称</span></li> -->
                     <li v-for="item in alldata"><span>排名：{{item.rank}}</span><span>频道：{{item.tv_name}}</span><span>节目：{{item.epg_name}}</span></li>
                 </ul>
             </div>
-            <div v-show="curId===1">{{ysmessage}}</div>
-            <div v-show="curId===2">卫视</div>
+            <div v-show="curId===1">
+                央视
+                <ul>
+                    <li v-for="item in ysdata"><span>排名：{{item.rank}}</span><span>频道：{{item.tv_name}}</span><span>节目：{{item.epg_name}}</span></li>
+                </ul>
+            </div>
+            <div v-show="curId===2">
+                卫视
+                <ul>
+                    <li v-for="item in wsdata"><span>排名：{{item.rank}}</span><span>频道：{{item.tv_name}}</span><span>节目：{{item.epg_name}}</span></li>
+                </ul>
+            </div>
         </div>
     </div>
 </body>
 <script>
-var vmm=new Vue({
+new Vue({
     el: '#tab',
     data: {
         curId: 0,
-        alldata:[],
-        ysmessage:'央视222'
+        alldata: [],
+        ysdata: [],
+        wsdata: []
     },
     computed: {
-        
-    },
-    created:function(){
-        $.ajax({
-                url:'http://eye.kuyun.com/api/tvlb?tv_type=0',
-                type:'get',
-                dataType:'json',
-                sucess:function(res){
-                    for(var i=0;i<res.length;i++){
-                        alert(res.length);
-                        vmm.alldata.push(res[i]);
-                    }
-                }
-            })
+
     },
     methods: {
-        
+        allData: function() {
+            var _this = this;
+            axios.get('http://eye.kuyun.com/api/tvlb', {
+                    params: {
+                        tv_type: 0
+                    }
+                })
+                .then(function(response) {
+                    console.log(response);
+                    var allList = response.data.data;
+                    for (var i = 0; i < allList.length; i++) {
+                        _this.alldata.push(allList[i]);
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
+        ysData: function() {
+            var _this = this;
+            axios.get('http://eye.kuyun.com/api/tvlb', {
+                    params: {
+                        tv_type: 1
+                    }
+                })
+                .then(function(response) {
+                    console.log(response);
+                    var allList = response.data.data;
+                    for (var i = 0; i < allList.length; i++) {
+                        _this.ysdata.push(allList[i]);
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
+        wsData: function() {
+            var _this = this;
+            axios.get('http://eye.kuyun.com/api/tvlb', {
+                    params: {
+                        tv_type: 2
+                    }
+                })
+                .then(function(response) {
+                    console.log(response);
+                    var allList = response.data.data;
+                    for (var i = 0; i < allList.length; i++) {
+                        _this.wsdata.push(allList[i]);
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
     },
     mounted: function() {
+        this.allData();
+        this.ysData();
+        this.wsData();
     }
 })
 </script>
